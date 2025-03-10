@@ -4,15 +4,80 @@
 {% endblock %}
 {% block content %}
     <p class="title">Services</p>
+    
     {% if user.is_company %}
-        <a class="create_service" href="/services/create"> Create Service</a>
+        <a class="create_service" href="/services/create">Create Service</a>
     {% endif %}
-    <div class='services_list'>
-        {% if services %}
-            {% for service in services.all %}
-            {% endfor %}
-        {% else %}
-            <h2>Sorry No services available yet</h2>
-        {% endif %}
-     </div>
+    
+    <!-- Service Categories -->
+    <div class="service-categories">
+        <h2>Service Categories</h2>
+        <div class="category-grid">
+            <a href="/services/air-conditioner/" class="category-card">
+                <h3>Air Conditioner</h3>
+            </a>
+            <a href="/services/carpentry/" class="category-card">
+                <h3>Carpentry</h3>
+            </a>
+            <a href="/services/electricity/" class="category-card">
+                <h3>Electricity</h3>
+            </a>
+            <a href="/services/gardening/" class="category-card">
+                <h3>Gardening</h3>
+            </a>
+            <a href="/services/home-machines/" class="category-card">
+                <h3>Home Machines</h3>
+            </a>
+            <a href="/services/house-keeping/" class="category-card">
+                <h3>House Keeping</h3>
+            </a>
+            <a href="/services/interior-design/" class="category-card">
+                <h3>Interior Design</h3>
+            </a>
+            <a href="/services/locks/" class="category-card">
+                <h3>Locks</h3>
+            </a>
+            <a href="/services/painting/" class="category-card">
+                <h3>Painting</h3>
+            </a>
+            <a href="/services/plumbing/" class="category-card">
+                <h3>Plumbing</h3>
+            </a>
+            <a href="/services/water-heaters/" class="category-card">
+                <h3>Water Heaters</h3>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Recent Services -->
+    <div class="recent-services">
+        <h2>Recent Services</h2>
+        <div class='services-grid'>
+            {% if services %}
+                {% for service in services|slice:":6" %}
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <h3><a href="/services/{{service.id}}">{{ service.name }}</a></h3>
+                            <span class="service-price">{{ service.price_hour }}€/hour</span>
+                        </div>
+                        <div class="service-card-category">
+                            <span class="category-tag">{{ service.field }}</span>
+                        </div>
+                        <p class="service-description">{{ service.description|truncatechars:100 }}</p>
+                        <div class="service-card-footer">
+                            <span class="service-provider">by <a href="/company/{{service.company.user}}">{{service.company.user}}</a></span>
+                            {% if user.is_customer %}
+                                <a href="/services/{{service.id}}/request_service/" class="request-btn">Request</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-services-message">
+                    <h2>No services available yet</h2>
+                    <p>Be the first to offer a service by clicking "Create Service" above!</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

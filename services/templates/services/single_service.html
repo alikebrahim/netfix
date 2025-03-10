@@ -3,13 +3,71 @@
     {{ service.name }}
 {% endblock %}
 {% block content %}
-    <div class='service_info_header'>
-        <h1>{{service.name}} -- {{service.price_hour}}€/hour</h1>
-        <h5>by <a href="/company/{{service.company.user}}">{{service.company.user}}</a></h5>
+    <div class="single-service-container">
+        <div class="service-breadcrumb">
+            <a href="/services/">&larr; All Services</a> / 
+            <a href="/services/{{ service.field|lower|slugify }}/">{{ service.field }}</a>
+        </div>
+        
+        <div class="service-details-card">
+            <div class="service-header">
+                <h1>{{service.name}}</h1>
+                <div class="service-meta">
+                    <span class="service-category">{{ service.field }}</span>
+                    <span class="service-date">Listed on: {{ service.date|date:"F d, Y" }}</span>
+                </div>
+            </div>
+            
+            <div class="service-body">
+                <div class="service-description">
+                    <h3>Description</h3>
+                    <p>{{service.description}}</p>
+                </div>
+                
+                <div class="service-pricing">
+                    <div class="price-box">
+                        <h3>Price</h3>
+                        <span class="price-value">{{service.price_hour}}€</span>
+                        <span class="price-unit">per hour</span>
+                    </div>
+                    
+                    {% if service.rating > 0 %}
+                    <div class="rating-box">
+                        <h3>Rating</h3>
+                        <div class="stars">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= service.rating %}
+                                    <span class="star filled">★</span>
+                                {% else %}
+                                    <span class="star">☆</span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="company-info">
+                    <h3>Service Provider</h3>
+                    <div class="company-details">
+                        <span class="company-name">
+                            <strong>{{ service.company.user }}</strong>
+                        </span>
+                        <span class="company-field">Specializes in: {{ service.company.field }}</span>
+                        <a href="/company/{{service.company.user}}" class="view-profile">View Profile</a>
+                    </div>
+                </div>
+                
+                <div class="service-actions">
+                    {% if request.user.is_customer %}
+                        <a href="/services/{{service.id}}/request_service/" class="request-service-btn">Request This Service</a>
+                    {% elif request.user.is_company and request.user == service.company.user %}
+                        <span class="owner-badge">You own this service</span>
+                    {% elif not request.user.is_authenticated %}
+                        <a href="/login" class="login-to-request">Login to request this service</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
-    <h3>{{service.field}}</h3>
-    <p style="text-align: left;">{{service.description}}</p>
-    {% if request.user.is_customer %}
-        <a href="/services/{{service.id}}/request_service/" class="like_button">Request Service</a>
-    {% endif %}
 {% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+    Search Results - {{ query }}
+{% endblock %}
+
+{% block content %}
+    <div class="search-results-container">
+        <div class="search-header">
+            <h1 class="section-title">Search Results</h1>
+            {% if query %}
+                <p class="search-query">Results for: <strong>{{ query }}</strong></p>
+            {% endif %}
+            
+            <div class="search-form-container">
+                <form method="GET" action="/services/search/" class="search-form">
+                    <input type="text" name="q" placeholder="Search for services..." class="search-input" value="{{ query }}">
+                    <button type="submit" class="search-button">Search</button>
+                </form>
+            </div>
+        </div>
+        
+        {% if services %}
+            <div class="search-results-count">
+                <p>{{ services|length }} result{% if services|length != 1 %}s{% endif %} found</p>
+            </div>
+            
+            <div class="services-grid">
+                {% for service in services %}
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
+                            <div class="service-price">${{ service.price_hour }}/hr</div>
+                        </div>
+                        <div class="service-card-category">
+                            <span class="category-tag">{{ service.field }}</span>
+                        </div>
+                        <div class="service-description">
+                            {{ service.description|truncatechars:100 }}
+                        </div>
+                        <div class="service-card-footer">
+                            <div class="service-provider">
+                                Provided by: {{ service.company.user.username }}
+                            </div>
+                            <a href="/services/{{ service.id }}/request_service" class="request-btn">Request</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <p>No services found matching your search criteria.</p>
+                <p>Try using different keywords or browse our <a href="/services/">service categories</a>.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

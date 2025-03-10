@@ -41,4 +41,17 @@ class CompanySignUpView(CreateView):
 
 
 def LoginUserView(request):
-    pass
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+            user = User.objects.get(email=email)
+            user = authenticate(username=user.username, password=password)
+            if user:
+                login(request, user)
+                return redirect('/')
+    else:
+        form = UserLoginForm()
+    
+    return render(request, 'users/login.html', {'form': form})

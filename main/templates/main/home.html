@@ -1,11 +1,76 @@
 {% extends 'main/base.html' %} 
-    {% block title %}
-        NetFix
-    {% endblock %}
+{% block title %}
+    NetFix - Home Services Marketplace
+{% endblock %}
 
 {% block content %}
-    <div style="margin-top: 50px;">
-        <p class="site_title">NetFix</p>
-        <img class="home_logo" src="static/css/logo.png" alt="logo">
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="site_title">NetFix</h1>
+            <p class="hero-tagline">Your one-stop solution for all home services</p>
+            <img class="home_logo" src="static/css/logo.png" alt="logo">
+            <div class="hero-buttons">
+                <a href="/services/" class="hero-button primary">Browse Services</a>
+                {% if user.is_authenticated %}
+                    {% if user.is_company %}
+                        <a href="/services/create/" class="hero-button secondary">Create Service</a>
+                    {% else %}
+                        <a href="/customer/{{ user.username }}" class="hero-button secondary">My Profile</a>
+                    {% endif %}
+                {% else %}
+                    <a href="/users/login/" class="hero-button secondary">Sign In</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="features-section">
+        <h2 class="section-title">How It Works</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Find Services</h3>
+                <p>Browse through our extensive catalog of home services provided by qualified professionals</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📅</div>
+                <h3>Book Instantly</h3>
+                <p>Schedule service appointments at your preferred time with just a few clicks</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Quality Work</h3>
+                <p>Get your home issues fixed by trusted, experienced service providers</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="categories-preview">
+        <h2 class="section-title">Popular Categories</h2>
+        <div class="categories-grid">
+            <a href="/services/plumbing" class="category-preview-card">
+                <h3>Plumbing</h3>
+            </a>
+            <a href="/services/electricity" class="category-preview-card">
+                <h3>Electricity</h3>
+            </a>
+            <a href="/services/carpentry" class="category-preview-card">
+                <h3>Carpentry</h3>
+            </a>
+            <a href="/services/house-keeping" class="category-preview-card">
+                <h3>House Keeping</h3>
+            </a>
+        </div>
+        <div class="view-all-container">
+            <a href="/services/" class="view-all-link">View All Categories</a>
+        </div>
+    </div>
+
+    <div class="search-section">
+        <h2 class="section-title">Find The Service You Need</h2>
+        <form method="GET" action="/services/search/" class="search-form">
+            <input type="text" name="q" placeholder="Search for services..." class="search-input">
+            <button type="submit" class="search-button">Search</button>
+        </form>
     </div>
 {% endblock %}

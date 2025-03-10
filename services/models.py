@@ -10,7 +10,7 @@ class Service(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     name = models.CharField(max_length=40)
     description = models.TextField()
-    price_hour = models.DecimalField(decimal_places=2, max_digits=100)
+    price_hour = models.DecimalField(decimal_places=2, max_digits=7)
     rating = models.IntegerField(validators=[MinValueValidator(
         0), MaxValueValidator(5)], default=0)
     choices = (
@@ -32,3 +32,19 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ServiceRequest(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    address = models.CharField(max_length=255)
+    hours = models.DecimalField(
+        decimal_places=2, 
+        max_digits=5,
+        validators=[MinValueValidator(0.5)]
+    )
+    request_date = models.DateTimeField(auto_now_add=True)
+    total_cost = models.DecimalField(decimal_places=2, max_digits=10)
+    
+    def __str__(self):
+        return f"{self.customer} - {self.service} - {self.request_date}"
