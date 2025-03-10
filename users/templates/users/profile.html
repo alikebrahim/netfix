@@ -25,48 +25,11 @@
         </div>
     </div>
 
-    <!-- Profile Stats -->
-    <div class="profile-stats">
-        {% if user.is_customer %}
-            <div class="stat-box">
-                <h3>Age</h3>
-                <p>{{ user_age }}</p>
-            </div>
-            <div class="stat-box">
-                <h3>Service Requests</h3>
-                <p>{{ sh|length }}</p>
-            </div>
-            <div class="stat-box">
-                <h3>Member Since</h3>
-                <p>{{ user.date_joined|date:"M Y" }}</p>
-            </div>
-        {% else %}
-            <div class="stat-box">
-                <h3>Field</h3>
-                <p>{{ user.company.field }}</p>
-            </div>
-            <div class="stat-box">
-                <h3>Services Offered</h3>
-                <p>{{ services|length }}</p>
-            </div>
-            <div class="stat-box">
-                <h3>Rating</h3>
-                <p>{{ user.company.rating }}/5</p>
-            </div>
-            <div class="stat-box">
-                <h3>Member Since</h3>
-                <p>{{ user.date_joined|date:"M Y" }}</p>
-            </div>
-        {% endif %}
-    </div>
-
-    <!-- Edit Profile Button - Only show if viewing own profile -->
-    {% if request.user.is_authenticated and request.user.username == user.username %}
-        {% if user.is_customer %}
-            <a href="{% url 'edit_customer_profile' name=user.username %}" class="edit-profile-btn">Edit Profile</a>
-        {% elif user.is_company %}
-            <a href="{% url 'edit_company_profile' name=user.username %}" class="edit-profile-btn">Edit Profile</a>
-        {% endif %}
+    <!-- Company Field Display (if company) -->
+    {% if not user.is_customer %}
+        <div class="company-field-display">
+            <p><strong>Field:</strong> {{ user.company.field }}</p>
+        </div>
     {% endif %}
 
     <!-- Services Section -->
@@ -106,7 +69,6 @@
                     </div>
                     <div class="service-item-details">
                         <span class="detail-item">Price: €{{service.price_hour}}/hour</span>
-                        <span class="detail-item">Rating: {{service.rating}}/5</span>
                         <span class="detail-item">Added: {{service.date|date:"F j, Y"}}</span>
                     </div>
                 </div>

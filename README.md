@@ -1,20 +1,20 @@
-# NetFix - Service Marketplace
+# NetFix - Home Services Marketplace
 
-A Django-based service marketplace where companies can offer services and customers can request them.
+A simple Django-based marketplace where companies can offer services and customers can request them.
 
 ## Project Overview
 
-NetFix is a web application that enables:
-- Companies to register and create services in their field of work
+NetFix enables:
+- Companies to register and create services in their specific field
 - Customers to register and request services
-- User profile management for both company and customer accounts
-- Service browsing by category and popularity
+- Basic user profiles for both company and customer accounts
+- Service browsing by category
 
 ## Setup Instructions
 
 ### Prerequisites
 - Python 3.x
-- pyenv (recommended for environment management)
+- Basic Django knowledge
 
 ### Installation
 
@@ -24,10 +24,10 @@ git clone [repository URL]
 cd netfix
 ```
 
-2. Set up virtual environment using pyenv:
+2. Set up virtual environment (optional but recommended):
 ```bash
-pyenv virtualenv 3.12.8 netfix-env
-pyenv local netfix-env
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 3. Install dependencies:
@@ -40,27 +40,32 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-5. Run the development server:
+5. Collect static files:
+```bash
+python manage.py collectstatic
+```
+
+6. Run the development server:
 ```bash
 python manage.py runserver
 ```
 
-6. Access the application at http://127.0.0.1:8000/
+7. Access the application at http://127.0.0.1:8000/
 
 ## Project Structure
 
-- **main**: General pages and base templates
-- **users**: User management (registration, authentication, profiles)
+- **main**: Basic pages and navigation
+- **users**: Simple user management (registration, login, profiles)
 - **services**: Service creation, listing, and request handling
+
+## Usage
+
+- Register as a company or customer at /users/register/
+- Login at /users/login/
+- Browse services at /services/
+- Companies can create services at /services/create/
+- View your profile at /company/[username] or /customer/[username]
 
 ## Development Notes
 
-This project is built with Django 3.1.14. When contributing, please follow the code style guidelines in the CLAUDE.md file.
-
-## License
-
-[License information]
-
-## Contributors
-
-[Contributor information]
+This project is built with Django 3.1.14 and focuses on simplicity and ease of maintenance.

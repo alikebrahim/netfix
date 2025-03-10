@@ -31,20 +31,6 @@
                         <span class="price-unit">per hour</span>
                     </div>
                     
-                    {% if service.rating > 0 %}
-                    <div class="rating-box">
-                        <h3>Rating</h3>
-                        <div class="stars">
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= service.rating %}
-                                    <span class="star filled">★</span>
-                                {% else %}
-                                    <span class="star">☆</span>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endif %}
                 </div>
                 
                 <div class="company-info">

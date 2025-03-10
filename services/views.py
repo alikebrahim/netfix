@@ -95,22 +95,3 @@ def request_service(request, id):
     return render(request, 'services/request_service.html', context)
 
 
-def search_services(request):
-    query = request.GET.get('q', '')
-    
-    if query:
-        results = Service.objects.filter(
-            Q(name__icontains=query) |
-            Q(description__icontains=query) |
-            Q(field__icontains=query) |
-            Q(company__user__username__icontains=query)
-        ).order_by('-date')
-    else:
-        results = Service.objects.all().order_by('-date')
-    
-    context = {
-        'services': results,
-        'query': query,
-    }
-    
-    return render(request, 'services/search_results.html', context)
