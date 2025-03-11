@@ -6,6 +6,11 @@
 {% block content %}
 <div class="create-service-form">
     <h2>Create a New Service</h2>
+    {% if is_all_in_one %}
+        <p class="service-note">As an 'All in One' company, you can create services in any field.</p>
+    {% else %}
+        <p class="service-note">Your company is registered as a <strong>{{ company_field }}</strong> provider. You can only create services in this field.</p>
+    {% endif %}
     <form method="POST">
         {% csrf_token %}
         

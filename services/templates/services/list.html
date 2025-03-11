@@ -6,7 +6,7 @@
     <p class="title">Services</p>
     
     {% if user.is_company %}
-        <a class="create_service" href="/services/create">Create Service</a>
+        <a class="create_service" href="{% url 'service_create' %}">Create Service</a>
     {% endif %}
     
     <!-- Service Categories -->
@@ -57,7 +57,7 @@
                 {% for service in services|slice:":6" %}
                     <div class="service-card">
                         <div class="service-card-header">
-                            <h3><a href="/services/{{service.id}}">{{ service.name }}</a></h3>
+                            <h3><a href="{% url 'index' id=service.id %}">{{ service.name }}</a></h3>
                             <span class="service-price">{{ service.price_hour }}€/hour</span>
                         </div>
                         <div class="service-card-category">
@@ -67,7 +67,7 @@
                         <div class="service-card-footer">
                             <span class="service-provider">by <a href="/company/{{service.company.user}}">{{service.company.user}}</a></span>
                             {% if user.is_customer %}
-                                <a href="/services/{{service.id}}/request_service/" class="request-btn">Request</a>
+                                <a href="{% url 'request_service' id=service.id %}" class="request-btn">Request</a>
                             {% endif %}
                         </div>
                     </div>

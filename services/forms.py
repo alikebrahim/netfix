@@ -1,9 +1,9 @@
 from django import forms
-
-from users.models import Company
+from .models import Service
 
 
 class CreateNewService(forms.Form):
+    """Form for creating a new service."""
     name = forms.CharField(max_length=40)
     description = forms.CharField(widget=forms.Textarea, label='Description')
     price_hour = forms.DecimalField(
@@ -11,18 +11,21 @@ class CreateNewService(forms.Form):
     field = forms.ChoiceField(required=True)
     company_field = None  # Store the company's field for validation
 
-    def __init__(self, *args, choices='', company_field=None, **kwargs):
+    def __init__(self, *args, choices=None, company_field=None, **kwargs):
         super(CreateNewService, self).__init__(*args, **kwargs)
         self.company_field = company_field
         
         # adding choices to fields
         if choices:
             self.fields['field'].choices = choices
+        else:
+            self.fields['field'].choices = Service.choices
         
         # adding placeholders to form fields
         self.fields['name'].widget.attrs['placeholder'] = 'Enter Service Name'
         self.fields['description'].widget.attrs['placeholder'] = 'Enter Description'
         self.fields['price_hour'].widget.attrs['placeholder'] = 'Enter Price per Hour'
+        self.fields['price_hour'].widget.attrs['step'] = '0.1'  # Set step to 0.1
         self.fields['name'].widget.attrs['autocomplete'] = 'off'
     
     def clean_field(self):
@@ -33,6 +36,7 @@ class CreateNewService(forms.Form):
 
 
 class RequestServiceForm(forms.Form):
+    """Form for requesting a service."""
     address = forms.CharField(max_length=255)
     hours = forms.DecimalField(
         decimal_places=2,
@@ -46,3 +50,4 @@ class RequestServiceForm(forms.Form):
         # Adding placeholders
         self.fields['address'].widget.attrs['placeholder'] = 'Enter your address'
         self.fields['hours'].widget.attrs['placeholder'] = 'Enter hours needed (minimum 0.5)'
+        self.fields['hours'].widget.attrs['step'] = '0.1'  # Set step to 0.1

@@ -8,7 +8,7 @@
     <div class="field-services-container">
         <div class="field-header">
             <h2>Browse {{field}} Services</h2>
-            <a href="/services/" class="back-to-all">&larr; Back to all services</a>
+            <a href="{% url 'services_list' %}" class="back-to-all">&larr; Back to all services</a>
         </div>
         
         {% if services.all|length != 0 %}
@@ -16,7 +16,7 @@
                 {% for service in services.all %}
                     <div class="service-card">
                         <div class="service-card-header">
-                            <h3><a href="/services/{{service.id}}">{{ service.name }}</a></h3>
+                            <h3><a href="{% url 'index' id=service.id %}">{{ service.name }}</a></h3>
                             <span class="service-price">{{ service.price_hour }}€/hour</span>
                         </div>
                         <div class="service-card-category">
@@ -26,7 +26,7 @@
                         <div class="service-card-footer">
                             <span class="service-provider">by <a href="/company/{{service.company.user}}">{{service.company.user}}</a></span>
                             {% if user.is_customer %}
-                                <a href="/services/{{service.id}}/request_service/" class="request-btn">Request</a>
+                                <a href="{% url 'request_service' id=service.id %}" class="request-btn">Request</a>
                             {% endif %}
                         </div>
                     </div>
@@ -36,11 +36,15 @@
             <div class="no-services-message">
                 <h3>No {{field}} services available yet</h3>
                 {% if user.is_company %}
-                    <p>Be the first to offer a {{field}} service by <a href="/services/create/">creating one</a>!</p>
+                    {% if user.company.field == field or user.company.field == 'All in One' %}
+                        <p>Be the first to offer a {{field}} service by <a href="{% url 'service_create' %}">creating one</a>!</p>
+                    {% else %}
+                        <p>Only {{field}} companies or 'All in One' companies can create services in this category.</p>
+                    {% endif %}
                 {% else %}
                     <p>Check back later or explore other service categories.</p>
                 {% endif %}
-                <a href="/services/" class="like_button">Browse Other Categories</a>
+                <a href="{% url 'services_list' %}" class="like_button">Browse Other Categories</a>
             </div>
         {% endif %}
     </div>
